@@ -37,7 +37,6 @@ public class DiceRollerViewModel : INotifyPropertyChanged
         {
             _selectedRoll = value;
             OnPropertyChanged();
-            // Уведомляем, что состояние команды может измениться
             ((RelayCommand)DeleteSelectedRollCommand).RaiseCanExecuteChanged();
         }
     }
