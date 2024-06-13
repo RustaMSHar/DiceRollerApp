@@ -2,22 +2,25 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 public class DiceRollerViewModel : INotifyPropertyChanged
 {
     private int _numberOfDice;
     private ObservableCollection<string> _rollResults;
-    private RollResult _diceRoller;
+    private RollDiceService _diceRoller;
     private string _errorMessage;
     private string _selectedRoll;
 
     public DiceRollerViewModel()
     {
-        _diceRoller = new RollResult();
+        _diceRoller = new RollDiceService();
         RollResults = new ObservableCollection<string>();
-        RollDiceCommand = new RelayCommand(RollDice);
+        RollDiceCommand = new RelayCommand(async () => await RollDiceAsync());
         DeleteSelectedRollCommand = new RelayCommand(DeleteSelectedRoll, CanDeleteSelectedRoll);
+
+        NumberOfDice = 1;
     }
 
     public int NumberOfDice
@@ -64,20 +67,22 @@ public class DiceRollerViewModel : INotifyPropertyChanged
     public ICommand RollDiceCommand { get; }
     public ICommand DeleteSelectedRollCommand { get; }
 
-    private void RollDice()
+    private async Task RollDiceAsync()
     {
         try
         {
-            var result = _diceRoller.RollDice(NumberOfDice);
-            foreach (var item in result)
-            {
-                RollResults.Insert(0, item);
-            }
+            var result = await _diceRoller.RollDiceAsync(NumberOfDice);
+            var resultString = string.Join(", ", result);
+            RollResults.Insert(0, resultString);
             ErrorMessage = string.Empty;
+        }
+        catch (ArgumentException ex)
+        {
+            ErrorMessage = $"Invalid input: {ex.Message}";
         }
         catch (Exception ex)
         {
-            ErrorMessage = ex.Message;
+            ErrorMessage = $"An unexpected error occurred: {ex.Message}";
         }
     }
 
