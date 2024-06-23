@@ -94,6 +94,8 @@ public class DiceRollerViewModel : INotifyPropertyChanged
         }
     }
 
+    // какие то изменения. 
+
     private bool CanDeleteSelectedRoll()
     {
         return SelectedRoll != null;
