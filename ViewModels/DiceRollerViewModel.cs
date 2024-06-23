@@ -86,6 +86,9 @@ public class DiceRollerViewModel : INotifyPropertyChanged
         }
     }
 
+
+    //мои изменения в new_master
+
     private void DeleteSelectedRoll()
     {
         if (SelectedRoll != null)
@@ -95,7 +98,7 @@ public class DiceRollerViewModel : INotifyPropertyChanged
     }
 
     // какие то изменения. 
-
+    // новые изменения в master
     private bool CanDeleteSelectedRoll()
     {
         return SelectedRoll != null;
